@@ -89,9 +89,12 @@ A player is considered to have completed the game when their participant has a f
 
 | Command | What it does |
 |---|---|
-| npm run db:migrate | Runs migrations that have not run yet |
-| npm run db:migrate:status | Lists every migration as up or down |
-| npm run db:seed | Loads the seed data |
-| npm run db:check | Counts the rows in every table |
-| npm run db:reset | Empties the database, rebuilds every table and reloads the seed data |
-| npm run check | Runs the same automatic check that GitHub runs after every push |
+| `npm run db:create` | Creates the PostgreSQL database |
+| `npm run db:migrate` | Runs migrations that have not run yet |
+| `npm run db:migrate:status` | Lists every migration as up or down |
+| `npm run db:migrate:undo` | Reverts the most recent migration |
+| `npm run db:seed` | Loads the seed data |
+| `npm run db:seed:undo` | Removes all seed data |
+| `npm run db:check` | Counts the rows in every table |
+| `npm run db:reset` | Empties the database, rebuilds every table and reloads the seed data |
+| `npm run check` | Runs the same automatic check that GitHub runs after every check |
