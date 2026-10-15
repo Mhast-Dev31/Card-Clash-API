@@ -1,0 +1,85 @@
+'use strict';
+
+module.exports = {
+  async up(queryInterface, Sequelize) {
+    await queryInterface.createTable('game_results', {
+      id: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false,
+      },
+
+      session_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'game_sessions',
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      },
+
+      participant_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'participants',
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      },
+
+      final_score: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+      },
+
+      final_hp: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+      },
+
+      correct_answers: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+      },
+
+      wrong_answers: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+      },
+
+      power_cards_used: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+      },
+
+      revivals_used: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+      },
+
+      comeback_points: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+      },
+
+      final_status: {
+        type: Sequelize.STRING(20),
+        allowNull: false,
+      },
+    });
+  },
+
+  async down(queryInterface) {
+    await queryInterface.dropTable('game_results');
+  },
+};
