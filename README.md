@@ -60,11 +60,30 @@ Base URL: `http://localhost:3001/api/v1`
 
 ## What "completed" means in my game
 
-[One or two sentences: when does a player count as having completed a game? For example: "A player completed the game when they answered every question, even if some answers were wrong or timed out."]
+A player is considered to have completed the game when their participant has a final result recorded in the `game_results` table when the match ends. This means the player is included in the final results whether they remained active or were eliminated before the game ended.
 
 ## Tables
 
-[List your tables, one line each, in the order of your migrations.]
+1. `users` — Player accounts and roles.
+2. `question_sets` — Collections of questions used in a game.
+3. `power_cards` — Available Power Cards and their effects.
+4. `questions` — Questions belonging to a question set.
+5. `game_sessions` — Individual Card Clash game sessions.
+6. `seat` — Connects users to games and stores their nickname and score for that game.
+7. `players` — Players who joined a game session.
+8. `participants` — Solo players or teams competing in a game.
+9. `choices` — Answer choices for questions.
+10. `question_cards` — Question Card configurations and scoring.
+11. `decks` — Card decks assigned to participants.
+12. `participant_members` — Links players to their participants or teams.
+13. `cards` — Cards contained in participant decks.
+14. `participant_power_cards` — Power Cards acquired by participants.
+15. `answers` — Player answers and their resulting score and HP changes.
+16. `aid_requests` — Requests made by eliminated participants for revival assistance.
+17. `revivals` — Records revival attempts and their outcomes.
+18. `comeback_challenges` — Comeback challenges after eligible revivals.
+19. `comeback_cards` — Questions/cards used during comeback challenges.
+20. `game_results` — Final results for each participant in a completed game.
 
 ## Database scripts
 

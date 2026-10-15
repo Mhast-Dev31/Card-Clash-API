@@ -92,7 +92,8 @@ module.exports = {
       await queryInterface.bulkInsert('question_sets', [
         {
           title: 'Card Clash Demo Questions',
-          description: 'Fictional seed question set for the Card Clash demo.',
+          description:
+            'Fictional seed question set for the Card Clash demo.',
           subject: 'Computer Science',
           grade_level: 'College',
         },
@@ -134,7 +135,8 @@ module.exports = {
         {
           name: 'Demo Double Points',
           type: 'POWER_UP',
-          description: 'Doubles the points earned from the next correct answer.',
+          description:
+            'Doubles the points earned from the next correct answer.',
           effect: 'DOUBLE_POINTS',
         },
       ]);
@@ -424,6 +426,25 @@ module.exports = {
       user4.user_id,
     ];
 
+    const seatData = [
+      {
+        nickname: 'Demo Player One',
+        score: 600,
+      },
+      {
+        nickname: 'Demo Player Two',
+        score: 500,
+      },
+      {
+        nickname: 'Demo Player Three',
+        score: 300,
+      },
+      {
+        nickname: 'Demo Player Four',
+        score: 100,
+      },
+    ];
+
     for (let i = 0; i < users.length; i++) {
       const existing = await findOne(
         `
@@ -444,6 +465,8 @@ module.exports = {
           {
             game: game.id,
             user_id: users[i],
+            nickname: seatData[i].nickname,
+            score: seatData[i].score,
             seat_number: i + 1,
             joined_at: new Date('2026-10-09T01:00:30Z'),
           },
@@ -1149,6 +1172,7 @@ module.exports = {
      * the database relationships. Removing the game removes
      * its dependent records where CASCADE was configured.
      */
+
     await queryInterface.bulkDelete(
       'game_sessions',
       {

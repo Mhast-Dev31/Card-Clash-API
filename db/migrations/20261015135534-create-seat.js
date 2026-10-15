@@ -32,6 +32,17 @@ module.exports = {
         onDelete: 'CASCADE',
       },
 
+      nickname: {
+        type: Sequelize.STRING(50),
+        allowNull: false,
+      },
+
+      score: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+      },
+
       seat_number: {
         type: Sequelize.INTEGER,
         allowNull: true,
