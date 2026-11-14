@@ -35,6 +35,17 @@ npm run db:check
 npm run dev
 ```
 
+## Demo accounts
+
+The seed data uses the local-only `DEMO_PASSWORD` value from `.env` for development and Postman checks.
+
+| School ID | Role | Purpose |
+|---|---|---|
+| `2099-0001` | PLAYER | Seeded player account |
+| `2099-0005` | ADMIN | Seeded admin account for local RBAC checks |
+
+Do not use these demo credentials in production.
+
 ## Environment variables
 
 | Key | Example | Purpose |
@@ -47,6 +58,9 @@ npm run dev
 | DB_USER | postgres | Database user |
 | DB_PASSWORD | (your own) | Database password. Never commit this. |
 | HUB_API_KEY | dev-hub-key | Key the Library Game Hub sends to read results. The library gives the real one at deployment. |
+| JWT_SECRET | (your own 64-character secret) | Signs login tokens. Never commit this value. |
+| JWT_EXPIRES_IN | 1h | Login token lifetime. |
+| CORS_ORIGINS | http://localhost:5173 | Comma-separated browser origins allowed to call the API. |
 
 ## Endpoints (Hub Contract v1.2)
 
