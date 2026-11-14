@@ -28,6 +28,7 @@ module.exports = {
     secret: process.env.JWT_SECRET,
     expiresIn: process.env.JWT_EXPIRES_IN || '1h',
   },
+  bcryptRounds: 10,
   corsOrigins: process.env.CORS_ORIGINS.split(',').map((origin) => origin.trim()).filter(Boolean),
   db: {
     host: process.env.DB_HOST,
