@@ -2,7 +2,7 @@
 const request = require('supertest');
 const app = require('../../src/app');
 
-// CHANGE THIS to the demo password your own seeder gives your test accounts (Week 12, Step 2).
+// Override this locally when using a different seeded demo password.
 const DEMO_PASSWORD = process.env.DEMO_PASSWORD || ['CardClash', 'Local', '2026'].join('-');
 
 // Logs in a seeded account and returns its "Authorization" header value.

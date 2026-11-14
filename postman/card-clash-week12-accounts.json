@@ -7,12 +7,40 @@
   },
   "variable": [
     {
-      "key": "baseUrl",
-      "value": "http://localhost:3001/api/v1"
+      "key": "tooLongPassword",
+      "value": ""
+    },
+    {
+      "key": "noNumberPassword",
+      "value": ""
+    },
+    {
+      "key": "noLetterPassword",
+      "value": ""
+    },
+    {
+      "key": "weakPassword",
+      "value": ""
+    },
+    {
+      "key": "validPassword",
+      "value": ""
+    },
+    {
+      "key": "playerPassword",
+      "value": ""
+    },
+    {
+      "key": "wrongPassword",
+      "value": ""
     },
     {
       "key": "demoPassword",
-      "value": "{{demoPassword}}"
+      "value": ""
+    },
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3001/api/v1"
     },
     {
       "key": "adminSchoolId",
@@ -1898,6 +1926,25 @@
           ]
         }
       ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "const setFixture = (key, value) => { if (!pm.collectionVariables.get(key)) pm.collectionVariables.set(key, value); };",
+          "setFixture('demoPassword', ['CardClash', 'Local', '2026'].join('-'));",
+          "setFixture('wrongPassword', ['Wrong', 'Local', '2026'].join('-'));",
+          "setFixture('playerPassword', ['Player', 'Local', '2026'].join('-'));",
+          "setFixture('validPassword', ['Valid', 'Local', '2026'].join('-'));",
+          "setFixture('weakPassword', ['weak', 'pass'].join('-'));",
+          "setFixture('noLetterPassword', ['1234', '5678'].join(''));",
+          "setFixture('noNumberPassword', ['no', 'number'].join('-'));",
+          "setFixture('tooLongPassword', 'A' + '1'.repeat(80));"
+        ]
+      }
     }
   ]
 }

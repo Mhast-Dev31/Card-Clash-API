@@ -61,6 +61,7 @@ Do not use these demo credentials in production.
 | JWT_SECRET | (your own 64-character secret) | Signs login tokens. Never commit this value. |
 | JWT_EXPIRES_IN | 1h | Login token lifetime. |
 | CORS_ORIGINS | http://localhost:5173 | Comma-separated browser origins allowed to call the API. |
+| DEMO_PASSWORD | (your own) | Local-only password for seeded demo accounts and tests. Never commit this value. |
 
 ## Endpoints (Hub Contract v1.2)
 
