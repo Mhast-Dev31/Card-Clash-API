@@ -1335,6 +1335,567 @@
               }
             }
           ]
+        },
+        {
+          "name": "Register password without a letter",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"school_id\":\"2099-9110\",\"full_name\":\"No Letter\",\"email\":\"no.letter@cs313.test\",\"password\":\"{{noLetterPassword}}\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Register password without a letter returns 400\", function () { pm.expect(pm.response.code === 400).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Register password without a number",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"school_id\":\"2099-9111\",\"full_name\":\"No Number\",\"email\":\"no.number@cs313.test\",\"password\":\"{{weakPassword}}defgh\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Register password without a number returns 400\", function () { pm.expect(pm.response.code === 400).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Register password over maximum length",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"school_id\":\"2099-9112\",\"full_name\":\"Long Password\",\"email\":\"long.password@cs313.test\",\"password\":\"{{tooLongPassword}}\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Register password over maximum length returns 400\", function () { pm.expect(pm.response.code === 400).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Register full name over maximum length",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"school_id\":\"2099-9113\",\"full_name\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"email\":\"long.name@cs313.test\",\"password\":\"{{validPassword}}\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Register full name over maximum length returns 400\", function () { pm.expect(pm.response.code === 400).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Register school ID over maximum length",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"school_id\":\"2099-9114000000000000\",\"full_name\":\"Long School ID\",\"email\":\"long.school@cs313.test\",\"password\":\"{{validPassword}}\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Register school ID over maximum length returns 400\", function () { pm.expect(pm.response.code === 400).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Register non-text school ID",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"school_id\":20999114,\"full_name\":\"Numeric School ID\",\"email\":\"numeric.school@cs313.test\",\"password\":\"{{validPassword}}\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Register non-text school ID returns 400\", function () { pm.expect(pm.response.code === 400).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login non-text school ID",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"school_id\":20990001,\"password\":\"{{validPassword}}\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Login non-text school ID returns 400\", function () { pm.expect(pm.response.code === 400).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login non-text password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"school_id\":\"{{adminSchoolId}}\",\"password\":{{noLetterPassword}}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Login non-text password returns 400\", function () { pm.expect(pm.response.code === 400).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Account with wrong authorization scheme",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Basic {{playerToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/me",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "me"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Account with wrong authorization scheme returns 401\", function () { pm.expect(pm.response.code === 401).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Account with empty bearer token",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/me",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "me"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Account with empty bearer token returns 401\", function () { pm.expect(pm.response.code === 401).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Users without token",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Users without token returns 401\", function () { pm.expect(pm.response.code === 401).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Users with changed admin token",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}changed"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Users with changed admin token returns 401\", function () { pm.expect(pm.response.code === 401).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Admin changes player to PLAYER",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users/{{targetUserId}}/role",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "{{targetUserId}}",
+                "role"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"role\":\"PLAYER\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Admin changes player to PLAYER returns 200\", function () { pm.expect(pm.response.code === 200).to.be.true; });",
+                  "pm.test('role changed to PLAYER', function () { pm.expect(pm.response.json().user.role === 'PLAYER').to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Admin handles another missing user",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users/999998/role",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "999998",
+                "role"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"role\":\"HOST\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Admin handles another missing user returns 404\", function () { pm.expect(pm.response.code === 404).to.be.true; });"
+                ]
+              }
+            }
+          ]
         }
       ]
     }
