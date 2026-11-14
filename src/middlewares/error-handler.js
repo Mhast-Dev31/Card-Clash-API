@@ -1,15 +1,28 @@
-// Last stop for any error thrown in a route. Four arguments = error handler.
-// The client gets clean JSON; the stack trace stays in the server log.
+const { mapDatabaseError } = require('../errors/db-errors');
+
 function errorHandler(err, req, res, next) {
   console.error(err);
+
+  const databaseError = mapDatabaseError(err);
+
+  if (databaseError) {
+    return res.status(databaseError.status).json({
+      error: {
+        code: databaseError.code,
+        message: databaseError.message,
+      },
+    });
+  }
 
   const status = err.status || 500;
   const isServerFault = status >= 500;
 
-  res.status(status).json({
+  return res.status(status).json({
     error: {
       code: isServerFault ? 'INTERNAL_ERROR' : err.code || 'BAD_REQUEST',
-      message: isServerFault ? 'Something went wrong on the server.' : err.message,
+      message: isServerFault
+        ? 'Something went wrong on the server.'
+        : err.message,
     },
   });
 }
