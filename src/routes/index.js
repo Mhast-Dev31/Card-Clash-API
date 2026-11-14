@@ -12,6 +12,7 @@ router.use('/game-info', require('./game-info.routes'));
 router.use(currentUser);
 
 router.use('/auth', require('./auth.routes'));
+router.use('/users', require('./user.routes'));
 router.use('/results', require('./results.routes'));
 
 // Mount your modules here, one line each. For example:
