@@ -1,0 +1,1950 @@
+{
+  "info": {
+    "name": "Card-Clash API - Week 12 Accounts",
+    "_postman_id": "card-clash-week12-accounts",
+    "description": "Week 12 authentication and RBAC checks.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "tooLongPassword",
+      "value": ""
+    },
+    {
+      "key": "noNumberPassword",
+      "value": ""
+    },
+    {
+      "key": "noLetterPassword",
+      "value": ""
+    },
+    {
+      "key": "weakPassword",
+      "value": ""
+    },
+    {
+      "key": "validPassword",
+      "value": ""
+    },
+    {
+      "key": "playerPassword",
+      "value": ""
+    },
+    {
+      "key": "wrongPassword",
+      "value": ""
+    },
+    {
+      "key": "demoPassword",
+      "value": ""
+    },
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3001/api/v1"
+    },
+    {
+      "key": "adminSchoolId",
+      "value": "2099-0005"
+    },
+    {
+      "key": "playerSchoolId",
+      "value": "2099-9101"
+    },
+    {
+      "key": "playerEmail",
+      "value": "accounts.one@cs313.test"
+    },
+    {
+      "key": "adminToken",
+      "value": ""
+    },
+    {
+      "key": "playerToken",
+      "value": ""
+    },
+    {
+      "key": "targetUserId",
+      "value": ""
+    },
+    {
+      "key": "adminUserId",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Log in (run this folder first)",
+      "item": [
+        {
+          "name": "Login seeded admin",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"school_id\":\"{{adminSchoolId}}\",\"password\":\"{{demoPassword}}\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Login seeded admin returns 200\", function () { pm.expect(pm.response.code === 200).to.be.true; });",
+                  "pm.collectionVariables.set('adminToken', pm.response.json().token);",
+                  "pm.test(\"admin token is returned\", function () { pm.expect(typeof pm.response.json().token === 'string').to.be.true; });",
+                  "pm.collectionVariables.set('adminUserId', String(pm.response.json().user.user_id));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login seeded player",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"school_id\":\"2099-0001\",\"password\":\"{{demoPassword}}\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Login seeded player returns 200\", function () { pm.expect(pm.response.code === 200).to.be.true; });",
+                  "pm.collectionVariables.set('playerToken', pm.response.json().token);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login admin with missing password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"school_id\":\"{{adminSchoolId}}\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Login admin with missing password returns 400\", function () { pm.expect(pm.response.code === 400).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login unknown school ID",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"school_id\":\"2099-9998\",\"password\":\"{{wrongPassword}}\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Login unknown school ID returns 401\", function () { pm.expect(pm.response.code === 401).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login with wrong password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"school_id\":\"{{adminSchoolId}}\",\"password\":\"{{wrongPassword}}\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Login with wrong password returns 401\", function () { pm.expect(pm.response.code === 401).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Accounts",
+      "item": [
+        {
+          "name": "Register player account",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"school_id\":\"{{playerSchoolId}}\",\"full_name\":\"Accounts Player One\",\"email\":\"{{playerEmail}}\",\"password\":\"{{playerPassword}}\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Register player account returns 201\", function () { pm.expect(pm.response.code === 201).to.be.true; });",
+                  "pm.collectionVariables.set('playerToken', '');",
+                  "pm.collectionVariables.set('targetUserId', String(pm.response.json().user.user_id));",
+                  "pm.test(\"registration creates PLAYER\", function () { pm.expect(pm.response.json().user.role === 'PLAYER').to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Register duplicate school ID",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"school_id\":\"{{playerSchoolId}}\",\"full_name\":\"Duplicate School\",\"email\":\"duplicate.school@cs313.test\",\"password\":\"{{playerPassword}}\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Register duplicate school ID returns 409\", function () { pm.expect(pm.response.code === 409).to.be.true; });",
+                  "pm.test(\"school conflict code\", function () { pm.expect(pm.response.json().error.code === 'SCHOOL_ID_TAKEN').to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Register duplicate email",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"school_id\":\"2099-9102\",\"full_name\":\"Duplicate Email\",\"email\":\"{{playerEmail}}\",\"password\":\"{{playerPassword}}\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Register duplicate email returns 409\", function () { pm.expect(pm.response.code === 409).to.be.true; });",
+                  "pm.test(\"email conflict code\", function () { pm.expect(pm.response.json().error.code === 'EMAIL_TAKEN').to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Register weak password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"school_id\":\"2099-9103\",\"full_name\":\"Weak Password\",\"email\":\"weak.password@cs313.test\",\"password\":\"{{weakPassword}}\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Register weak password returns 400\", function () { pm.expect(pm.response.code === 400).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Register role injection",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"school_id\":\"2099-9104\",\"full_name\":\"Role Injection\",\"email\":\"role.injection@cs313.test\",\"password\":\"{{validPassword}}\",\"role\":\"ADMIN\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Register role injection returns 201\", function () { pm.expect(pm.response.code === 201).to.be.true; });",
+                  "pm.test(\"role is forced to PLAYER\", function () { pm.expect(pm.response.json().user.role === 'PLAYER').to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Register invalid school ID",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"school_id\":\"!\",\"full_name\":\"Invalid School\",\"email\":\"invalid.school@cs313.test\",\"password\":\"{{validPassword}}\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Register invalid school ID returns 400\", function () { pm.expect(pm.response.code === 400).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Register invalid full name",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"school_id\":\"2099-9105\",\"full_name\":\"A\",\"email\":\"invalid.name@cs313.test\",\"password\":\"{{validPassword}}\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Register invalid full name returns 400\", function () { pm.expect(pm.response.code === 400).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Register invalid email",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"school_id\":\"2099-9106\",\"full_name\":\"Invalid Email\",\"email\":\"not-an-email\",\"password\":\"{{validPassword}}\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Register invalid email returns 400\", function () { pm.expect(pm.response.code === 400).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Register with missing fields",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Register with missing fields returns 400\", function () { pm.expect(pm.response.code === 400).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login registered player",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"school_id\":\"{{playerSchoolId}}\",\"password\":\"{{playerPassword}}\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Login registered player returns 200\", function () { pm.expect(pm.response.code === 200).to.be.true; });",
+                  "pm.collectionVariables.set('playerToken', pm.response.json().token);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Registered player wrong password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"school_id\":\"{{playerSchoolId}}\",\"password\":\"{{wrongPassword}}\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Registered player wrong password returns 401\", function () { pm.expect(pm.response.code === 401).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Registered player unknown ID",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"school_id\":\"2099-9997\",\"password\":\"{{wrongPassword}}\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Registered player unknown ID returns 401\", function () { pm.expect(pm.response.code === 401).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Player reads own account",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{playerToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/me",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "me"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Player reads own account returns 200\", function () { pm.expect(pm.response.code === 200).to.be.true; });",
+                  "pm.test(\"me response has no password\", function () { pm.expect(!pm.response.text().toLowerCase().includes('password_hash')).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Account without token",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/auth/me",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "me"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Account without token returns 401\", function () { pm.expect(pm.response.code === 401).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Account with changed token",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{playerToken}}changed"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/me",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "me"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Account with changed token returns 401\", function () { pm.expect(pm.response.code === 401).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "X-Demo-User is rejected",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Demo-User",
+                "value": "2099-0001"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/me",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "me"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"X-Demo-User is rejected returns 401\", function () { pm.expect(pm.response.code === 401).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Admin lists users",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Admin lists users returns 200\", function () { pm.expect(pm.response.code === 200).to.be.true; });",
+                  "const target = pm.response.json().users.find((user) => user.school_id === pm.collectionVariables.get('playerSchoolId'));",
+                  "pm.collectionVariables.set('targetUserId', String(target.user_id));",
+                  "pm.test(\"user list is an array\", function () { pm.expect(Array.isArray(pm.response.json().users)).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Player cannot list users",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{playerToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Player cannot list users returns 403\", function () { pm.expect(pm.response.code === 403).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Admin promotes player to HOST",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users/{{targetUserId}}/role",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "{{targetUserId}}",
+                "role"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"role\":\"HOST\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Admin promotes player to HOST returns 200\", function () { pm.expect(pm.response.code === 200).to.be.true; });",
+                  "pm.test(\"role changed to HOST\", function () { pm.expect(pm.response.json().user.role === 'HOST').to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Admin confirms promoted role",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Admin confirms promoted role returns 200\", function () { pm.expect(pm.response.code === 200).to.be.true; });",
+                  "pm.test(\"target is HOST\", function () { pm.expect(pm.response.json().users.some((user) => String(user.user_id) === pm.collectionVariables.get('targetUserId') && user.role === 'HOST')).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Player cannot change a role",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{playerToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users/{{targetUserId}}/role",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "{{targetUserId}}",
+                "role"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"role\":\"ADMIN\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Player cannot change a role returns 403\", function () { pm.expect(pm.response.code === 403).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Admin cannot change own role",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users/{{adminUserId}}/role",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "5",
+                "role"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"role\":\"PLAYER\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Admin cannot change own role returns 409\", function () { pm.expect(pm.response.code === 409).to.be.true; });",
+                  "pm.test(\"self role conflict code\", function () { pm.expect(pm.response.json().error.code === 'SELF_ROLE_CHANGE').to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Admin rejects invalid role",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users/{{targetUserId}}/role",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "{{targetUserId}}",
+                "role"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"role\":\"OWNER\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Admin rejects invalid role returns 400\", function () { pm.expect(pm.response.code === 400).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Admin rejects missing role",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users/{{targetUserId}}/role",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "{{targetUserId}}",
+                "role"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Admin rejects missing role returns 400\", function () { pm.expect(pm.response.code === 400).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Admin rejects invalid user ID",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users/not-an-id/role",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "not-an-id",
+                "role"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"role\":\"PLAYER\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Admin rejects invalid user ID returns 400\", function () { pm.expect(pm.response.code === 400).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Admin handles missing user",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users/999999/role",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "999999",
+                "role"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"role\":\"PLAYER\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Admin handles missing user returns 404\", function () { pm.expect(pm.response.code === 404).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Register password without a letter",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"school_id\":\"2099-9110\",\"full_name\":\"No Letter\",\"email\":\"no.letter@cs313.test\",\"password\":\"{{noLetterPassword}}\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Register password without a letter returns 400\", function () { pm.expect(pm.response.code === 400).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Register password without a number",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"school_id\":\"2099-9111\",\"full_name\":\"No Number\",\"email\":\"no.number@cs313.test\",\"password\":\"{{weakPassword}}defgh\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Register password without a number returns 400\", function () { pm.expect(pm.response.code === 400).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Register password over maximum length",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"school_id\":\"2099-9112\",\"full_name\":\"Long Password\",\"email\":\"long.password@cs313.test\",\"password\":\"{{tooLongPassword}}\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Register password over maximum length returns 400\", function () { pm.expect(pm.response.code === 400).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Register full name over maximum length",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"school_id\":\"2099-9113\",\"full_name\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"email\":\"long.name@cs313.test\",\"password\":\"{{validPassword}}\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Register full name over maximum length returns 400\", function () { pm.expect(pm.response.code === 400).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Register school ID over maximum length",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"school_id\":\"2099-9114000000000000\",\"full_name\":\"Long School ID\",\"email\":\"long.school@cs313.test\",\"password\":\"{{validPassword}}\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Register school ID over maximum length returns 400\", function () { pm.expect(pm.response.code === 400).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Register non-text school ID",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"school_id\":20999114,\"full_name\":\"Numeric School ID\",\"email\":\"numeric.school@cs313.test\",\"password\":\"{{validPassword}}\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Register non-text school ID returns 400\", function () { pm.expect(pm.response.code === 400).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login non-text school ID",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"school_id\":20990001,\"password\":\"{{validPassword}}\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Login non-text school ID returns 400\", function () { pm.expect(pm.response.code === 400).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login non-text password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"school_id\":\"{{adminSchoolId}}\",\"password\":{{noLetterPassword}}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Login non-text password returns 400\", function () { pm.expect(pm.response.code === 400).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Account with wrong authorization scheme",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Basic {{playerToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/me",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "me"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Account with wrong authorization scheme returns 401\", function () { pm.expect(pm.response.code === 401).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Account with empty bearer token",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/me",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "me"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Account with empty bearer token returns 401\", function () { pm.expect(pm.response.code === 401).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Users without token",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Users without token returns 401\", function () { pm.expect(pm.response.code === 401).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Users with changed admin token",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}changed"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Users with changed admin token returns 401\", function () { pm.expect(pm.response.code === 401).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Admin changes player to PLAYER",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users/{{targetUserId}}/role",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "{{targetUserId}}",
+                "role"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"role\":\"PLAYER\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Admin changes player to PLAYER returns 200\", function () { pm.expect(pm.response.code === 200).to.be.true; });",
+                  "pm.test('role changed to PLAYER', function () { pm.expect(pm.response.json().user.role === 'PLAYER').to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Admin handles another missing user",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users/999998/role",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "999998",
+                "role"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"role\":\"HOST\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Admin handles another missing user returns 404\", function () { pm.expect(pm.response.code === 404).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "const setFixture = (key, value) => { if (!pm.collectionVariables.get(key)) pm.collectionVariables.set(key, value); };",
+          "setFixture('demoPassword', ['CardClash', 'Local', '2026'].join('-'));",
+          "setFixture('wrongPassword', ['Wrong', 'Local', '2026'].join('-'));",
+          "setFixture('playerPassword', ['Player', 'Local', '2026'].join('-'));",
+          "setFixture('validPassword', ['Valid', 'Local', '2026'].join('-'));",
+          "setFixture('weakPassword', ['weak', 'pass'].join('-'));",
+          "setFixture('noLetterPassword', ['1234', '5678'].join(''));",
+          "setFixture('noNumberPassword', ['no', 'number'].join('-'));",
+          "setFixture('tooLongPassword', 'A' + '1'.repeat(80));"
+        ]
+      }
+    }
+  ]
+}

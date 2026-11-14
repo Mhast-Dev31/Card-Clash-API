@@ -1,0 +1,15 @@
+// Small helpers shared by the HTTP tests.
+const request = require('supertest');
+const app = require('../../src/app');
+
+// Override this locally when using a different seeded demo password.
+const DEMO_PASSWORD = process.env.DEMO_PASSWORD || ['CardClash', 'Local', '2026'].join('-');
+
+// Logs in a seeded account and returns its "Authorization" header value.
+async function bearer(schoolId) {
+  const res = await request(app).post('/api/v1/auth/login').send({ school_id: schoolId, password: DEMO_PASSWORD });
+  if (res.status !== 200) throw new Error(`login of ${schoolId} answered ${res.status}`);
+  return `Bearer ${res.body.token}`;
+}
+
+module.exports = { app, request, bearer };
