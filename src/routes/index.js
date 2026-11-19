@@ -11,6 +11,9 @@ router.use('/game-info', require('./game-info.routes'));
 // From here on, req.user says who is calling (or null).
 router.use(currentUser);
 
+router.use('/auth', require('./auth.routes'));
+router.use('/question-sets', require('./question-bank.routes'));
+router.use('/game-sessions', require('./game-sessions.routes'));
 router.use('/results', require('./results.routes'));
 
 // Mount your modules here, one line each. For example:

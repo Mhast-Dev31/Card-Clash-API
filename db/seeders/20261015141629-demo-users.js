@@ -10,24 +10,28 @@ module.exports = {
         full_name: 'Demo Player One',
         email: 'demo.player.one@test',
         role: 'PLAYER',
+        password_hash: '$2b$10$dMlpoIsjkTsJgWy4wGIZ7u7Y4EXusYasQrhUyEv8Iw7.RGPQudQoS',
       },
       {
         school_id: '2099-0002',
         full_name: 'Demo Player Two',
         email: 'demo.player.two@test',
         role: 'PLAYER',
+        password_hash: '$2b$10$dMlpoIsjkTsJgWy4wGIZ7u7Y4EXusYasQrhUyEv8Iw7.RGPQudQoS',
       },
       {
         school_id: '2099-0003',
         full_name: 'Demo Player Three',
         email: 'demo.player.three@test',
         role: 'PLAYER',
+        password_hash: '$2b$10$dMlpoIsjkTsJgWy4wGIZ7u7Y4EXusYasQrhUyEv8Iw7.RGPQudQoS',
       },
       {
         school_id: '2099-0004',
         full_name: 'Demo Player Four',
         email: 'demo.player.four@test',
         role: 'PLAYER',
+        password_hash: '$2b$10$dMlpoIsjkTsJgWy4wGIZ7u7Y4EXusYasQrhUyEv8Iw7.RGPQudQoS',
       },
       {
         // This account intentionally never joins the demo game.
@@ -36,6 +40,7 @@ module.exports = {
         full_name: 'Demo Player Never Joined',
         email: 'demo.never.joined@test',
         role: 'PLAYER',
+        password_hash: '$2b$10$dMlpoIsjkTsJgWy4wGIZ7u7Y4EXusYasQrhUyEv8Iw7.RGPQudQoS',
       },
     ];
 

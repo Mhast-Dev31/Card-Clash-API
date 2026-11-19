@@ -47,6 +47,8 @@ npm run dev
 | DB_USER | postgres | Database user |
 | DB_PASSWORD | (your own) | Database password. Never commit this. |
 | HUB_API_KEY | dev-hub-key | Key the Library Game Hub sends to read results. The library gives the real one at deployment. |
+| JWT_SECRET | (your own secret) | Secret used to sign login tokens. Never commit this. |
+| JWT_EXPIRES_IN | 1h | Login token lifetime. |
 
 ## Endpoints (Hub Contract v1.2)
 
@@ -57,6 +59,15 @@ Base URL: `http://localhost:3001/api/v1`
 | GET | /health | Is the API up and can it reach the database? | 200 (503 when the database is down) |
 | GET | /game-info | Slug, name, group, developer, description, player limits, version | 200 |
 | GET | /results | Finished games, every player, and the top 3. Needs the `X-Hub-Key` header. Optional `?since=` | 200 (401 without the key) |
+| POST | /auth/register | Create a PLAYER account | 201 |
+| POST | /auth/login | Log in and receive a JWT | 200 |
+| GET | /auth/me | Read the authenticated account | 200 |
+| GET | /question-sets | List question sets with pagination | 200 |
+| GET | /question-sets/:id/questions | List a question set's questions and choices | 200 |
+| POST | /game-sessions | Create a game session | 201 |
+| POST | /game-sessions/:id/players | Join a game session | 201 |
+| POST | /game-sessions/:id/start | Start a lobby | 200 |
+| POST | /game-sessions/:id/finish | Finish a game and record results | 200 |
 
 ## What "completed" means in my game
 
